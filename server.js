@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
@@ -23,9 +24,21 @@ let posts = [
   { id: 3, title: "Post 3" },
 ];
 
-//json api
+//json api GET all posts
 app.get("/api/posts", (req, res) => {
-  res.json(posts);
+  const limit = parseInt(req.query.limit);
+
+  if (!isNaN(limit) && limit > 0) {
+    res.json(posts.slice(0, limit));
+  } else {
+    res.json(posts);
+  }
 });
 
-app.listen(5000, () => console.log(`Server is running on port 5000`));
+// Get a single post
+app.get("/api/posts/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  res.json(posts.filter((post) => post.id === id));
+});
+
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
