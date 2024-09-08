@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const posts = require("./routes/posts");
 const PORT = process.env.PORT || 8000;
+const logger = require("./middleware/loggerMiddleware");
 
 const app = express();
 
@@ -11,6 +12,9 @@ const app = express();
 //Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// logger middlware
+app.use(logger);
 
 //Routes
 app.use("/api/posts", posts);
